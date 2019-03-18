@@ -58,6 +58,17 @@ namespace isrpo
     // Реализация фильтра будет здесь
     struct Filter
     {
+        string name;
+        string post;
+        char gender;
+        DateTime recruitmentDate;
 
+        void setFilter(string name, string post, char gender, DateTime recruitmentDate)
+        {
+            this.name = name;
+            this.post = post;
+            this.gender = gender;
+            this.recruitmentDate = recruitmentDate;
+        }
     }
 }
