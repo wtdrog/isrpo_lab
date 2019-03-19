@@ -5,54 +5,54 @@ namespace isrpo
 {
     class Program
     {
-        // Реализация меню будет находиться здесь
+        // Функция, которая выводит справку
         public static void WriteHelp()
         {
             Console.WriteLine("1 - Ввод нового элемента в список.");
             Console.WriteLine("2 - Вывод всего списка.");
             Console.WriteLine("3 - Вывод отфильтрованного списка.");
             Console.WriteLine("4 - Ввести значение фильтра.");
-            Console.WriteLine("q - Выход из программы.");
-            Console.WriteLine("F9 - Вывод этой справки.");
+            Console.WriteLine("0 - Выход из программы.");
+            Console.WriteLine("9 - Вывод этой справки.");
             Console.WriteLine();
         }
+
         static void Main(string[] args)
         {
             Filter filter = new Filter();
-
             WriteHelp();
+            // Цикл главного меню
             while (true)
             {
                 Console.Write("Выберите действие: ");
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                Console.WriteLine();
-                switch (keyInfo.Key)
+                string action = Console.ReadLine();
+                switch (action)
                 {
-                    case ConsoleKey.D1:
-                        // Ввод нового элемента в список
+                    case "1":   // Ввод нового элемента в список
                         Worker.AddWorker();
                         break;
-                    case ConsoleKey.D2:
-                        // Вывод всего списка
+
+                    case "2":   // Вывод всего списка
                         Worker.PrintWorkers();
                         break;
-                    case ConsoleKey.D3:
-                        // Вывод отфильтрованного списка
+
+                    case "3":   // Вывод отфильтрованного списка
                         Worker.PrintFilteredWorkers(ref filter);
                         break;
-                    case ConsoleKey.D4:
-                        // Ввести значение фильтра
+
+                    case "4":   // Ввести значение фильтра                       
                         filter.setFilter();
                         break;
-                    case ConsoleKey.Q:
-                        // Выход из программы
+
+                    case "0":   // Выход из программы
                         Console.WriteLine("Работа программы завершена.");
                         return;
-                    case ConsoleKey.F9:
-                        // Вывод справки
+
+                    case "9":   // Вывод справки
                         WriteHelp();
                         break;
-                    default:
+
+                    default:    // Неверный ввод
                         Console.WriteLine("Неверный ввод!");
                         break;
                 }
@@ -60,52 +60,28 @@ namespace isrpo
         }
     }
 
-    /// <summary>
-    /// Cтруктура для представления отдельного работника.
-    /// </summary>
+    // Реализация работника будет здесь
     struct Worker
     {
-        /// <summary>
-        /// Перечисление для представления пола работника.
-        /// </summary>
         public enum GenderEnum
         {
             MALE,
             FEMALE
         }
-
-        /// <summary>
-        /// Список, в котором хранятся все добавленные работники.
-        /// </summary>
         private static List<Worker> workers = new List<Worker>();
 
-        /// <summary>
-        /// Полное имя работника.
-        /// </summary>
+        /// Полное имя работника
         string Name;
-        /// <summary>
-        /// Должность работника.
-        /// </summary>
+        /// Должность работника
         string Position;
-        /// <summary>
-        /// Пол работника.
-        /// </summary>
+        /// Пол работника
         GenderEnum Gender;
-        /// <summary>
-        /// Дата найма работника.
-        /// </summary>
+        /// Дата найма работника
         DateTime HireDate;
 
-        /// <summary>
-        /// Метод для добавления новых работников путём ввода их параметров
-        /// через консоль.
-        /// </summary>
         public static void AddWorker()
         {
-            // Создание работника
             Worker worker = new Worker();
-
-            // Заполнение структуры работника
             Console.Write("Введите полное имя работника: ");
             worker.Name = ReadString();
             Console.Write("Введите должность работника: ");
@@ -114,14 +90,9 @@ namespace isrpo
             worker.Gender = ReadGender();
             Console.Write("Введите дату найма работника: ");
             worker.HireDate = ReadDate();
-
-            // Сохранение работника в список
             workers.Add(worker);
         }
 
-        /// <summary>
-        /// Метод для вывода всех работников на консоль с их подсчётом.
-        /// </summary>
         public static void PrintWorkers()
         {
             int counter = 1;
@@ -132,9 +103,6 @@ namespace isrpo
             }
         }
 
-        /// <summary>
-        /// Метод для ввода строки. Зацикливается до ввода непустой строки.
-        /// </summary>
         public static string ReadString()
         {
             string result;
@@ -145,10 +113,6 @@ namespace isrpo
             return result;
         }
 
-        /// <summary>
-        /// Метод для ввода пола работника. Зацикливается до ввода правильного
-        /// значения для пола работника.
-        /// </summary>
         public static GenderEnum ReadGender()
         {
             while (true)
@@ -166,10 +130,6 @@ namespace isrpo
             }
         }
 
-        /// <summary>
-        /// Метод для ввода даты и времени. Зацикливается до ввода правильного
-        /// значения для даты и времени.
-        /// </summary>
         public static DateTime ReadDate()
         {
             while (true)
@@ -181,12 +141,8 @@ namespace isrpo
             }
         }
 
-        /// <summary>
-        /// Метод для вывода информации об одном работнике на консоль.
-        /// </summary>
         void PrintSingleWorker()
         {
-            // Выбор строкового представления пола работника
             string genderString;
             switch (Gender)
             {
@@ -201,7 +157,6 @@ namespace isrpo
                     break;
             }
 
-            // Вывод информации о работнике
             Console.WriteLine($"Имя: { Name }");
             Console.WriteLine($"Должность: { Position }");
             Console.WriteLine($"Пол: { genderString }");
