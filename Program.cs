@@ -38,6 +38,7 @@ namespace isrpo
                         break;
                     case ConsoleKey.D3:
                         // Вывод отфильтрованного списка
+                        Worker.PrintFilteredWorkers(ref filter);
                         break;
                     case ConsoleKey.D4:
                         // Ввести значение фильтра
@@ -161,16 +162,57 @@ namespace isrpo
             Console.WriteLine($"Пол: { genderString }");
             Console.WriteLine($"Дата найма: { HireDate }");
         }
+
+        public static void PrintFilteredWorkers(ref Filter filter)
+        {
+            foreach (Worker worker in workers)
+            {
+                if (filter.name != null && worker.Name != filter.name)
+                    continue;
+
+                if (filter.post != null && worker.Position != filter.post)
+                    continue;
+
+                if (filter.gender != '\0')
+                {
+                    if (worker.Gender == Worker.GenderEnum.MALE && filter.gender == 'ж')
+                        continue;
+
+                    if (worker.Gender == Worker.GenderEnum.FEMALE && filter.gender == 'м')
+                        continue;
+                }
+
+                if (filter.recruitmentDateStart == new DateTime(0) && filter.recruitmentDateEnd == new DateTime(0))
+                {
+                    worker.PrintSingleWorker();
+                    continue;
+                }
+
+                if (filter.recruitmentDateStart != new DateTime(0) && filter.recruitmentDateEnd == new DateTime(0))
+                {
+                    if (worker.HireDate < filter.recruitmentDateEnd)
+                        worker.PrintSingleWorker();
+                    continue;
+                }
+
+                if (filter.recruitmentDateStart != new DateTime(0) && filter.recruitmentDateEnd != new DateTime(0))
+                {
+                    if (worker.HireDate >= filter.recruitmentDateStart && worker.HireDate <= filter.recruitmentDateEnd)
+                        worker.PrintSingleWorker();
+                    continue;
+                }
+            }
+        }
     }
 
     // Реализация фильтра будет здесь
     struct Filter
     {
-        string name;
-        string post;
-        char gender;
-        DateTime recruitmentDateStart;
-        DateTime recruitmentDateEnd;
+        public string name;
+        public string post;
+        public char gender;
+        public DateTime recruitmentDateStart;
+        public DateTime recruitmentDateEnd;
 
         public void setFilter()
         {
@@ -218,7 +260,7 @@ namespace isrpo
             if (!DateTime.TryParse(str, out recruitmentDateEnd))
                 recruitmentDateEnd = new DateTime(0);
 
-            if(this.recruitmentDateStart != new DateTime(0) && this.recruitmentDateEnd != new DateTime(0) && this.recruitmentDateStart > this.recruitmentDateEnd)
+            if (this.recruitmentDateStart != new DateTime(0) && this.recruitmentDateEnd != new DateTime(0) && this.recruitmentDateStart > this.recruitmentDateEnd)
             {
                 DateTime temp = new DateTime();
                 temp = this.recruitmentDateStart;
@@ -226,7 +268,7 @@ namespace isrpo
                 this.recruitmentDateEnd = temp;
             }
 
-            if(this.name != null)
+            if (this.name != null)
                 Console.WriteLine($"Фильтрация по имени: { this.name }");
             else
                 Console.WriteLine("Фильтрация по имени не задана");
@@ -238,7 +280,7 @@ namespace isrpo
 
             if (this.gender != '\0')
             {
-                switch(this.gender)
+                switch (this.gender)
                 {
                     case 'м':
                         Console.WriteLine("Фильтрация по полу: мужской");
@@ -247,7 +289,7 @@ namespace isrpo
                         Console.WriteLine("Фильтрация по полу: женский");
                         break;
                 }
-            }                
+            }
             else
                 Console.WriteLine("Фильтрация по полу не задана");
 
