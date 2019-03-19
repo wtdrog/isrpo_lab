@@ -32,6 +32,7 @@ namespace isrpo
                         break;
                     case ConsoleKey.D2:
                         // Вывод всего списка
+                        Worker.PrintWorkers();
                         break;
                     case ConsoleKey.D3:
                         // Вывод отфильтрованного списка
@@ -90,7 +91,12 @@ namespace isrpo
 
         public static void PrintWorkers()
         {
-
+            int counter = 1;
+            foreach (var worker in workers)
+            {
+                Console.WriteLine($"        Работник №{ counter++ }:");
+                worker.PrintSingleWorker();
+            }
         }
 
         public static string ReadString()
@@ -127,13 +133,30 @@ namespace isrpo
                 DateTime result;
                 if (DateTime.TryParse(ReadString(), out result))
                     return result;
-                Console.WriteLine("Неправильный формат даты.");
+                Console.WriteLine("Неправильный формат даты. Введите дату вида «день.месяц.год час:минута».");
             }
         }
 
         void PrintSingleWorker()
         {
+            string genderString;
+            switch (Gender)
+            {
+                case GenderEnum.MALE:
+                    genderString = "мужской";
+                    break;
+                case GenderEnum.FEMALE:
+                    genderString = "женский";
+                    break;
+                default:
+                    genderString = "ошибочка в программе";
+                    break;
+            }
 
+            Console.WriteLine($"Имя: { Name }");
+            Console.WriteLine($"Должность: { Position }");
+            Console.WriteLine($"Пол: { genderString }");
+            Console.WriteLine($"Дата найма: { HireDate }");
         }
     }
 
