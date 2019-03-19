@@ -226,9 +226,9 @@ namespace isrpo
             Console.Write("Введите должность работника: ");
             str = Console.ReadLine();
             if (str == string.Empty)
-                this.name = null;
+                this.post = null;
             else
-                this.name = str;
+                this.post = str;
 
             Console.Write("Введите пол работника (м/ж): ");
             str = Console.ReadLine();
