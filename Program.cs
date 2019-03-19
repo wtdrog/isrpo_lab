@@ -18,6 +18,8 @@ namespace isrpo
         }
         static void Main(string[] args)
         {
+            Filter filter = new Filter();
+
             WriteHelp();
             while (true)
             {
@@ -39,6 +41,7 @@ namespace isrpo
                         break;
                     case ConsoleKey.D4:
                         // Ввести значение фильтра
+                        filter.setFilter();
                         break;
                     case ConsoleKey.Q:
                         // Выход из программы
@@ -166,14 +169,97 @@ namespace isrpo
         string name;
         string post;
         char gender;
-        DateTime recruitmentDate;
+        DateTime recruitmentDateStart;
+        DateTime recruitmentDateEnd;
 
-        void setFilter(string name, string post, char gender, DateTime recruitmentDate)
+        public void setFilter()
         {
-            this.name = name;
-            this.post = post;
-            this.gender = gender;
-            this.recruitmentDate = recruitmentDate;
+            Console.Write("Введите полное имя работника: ");
+            string str = Console.ReadLine();
+            if (str == string.Empty)
+                this.name = null;
+            else
+                this.name = str;
+
+            Console.Write("Введите должность работника: ");
+            str = Console.ReadLine();
+            if (str == string.Empty)
+                this.name = null;
+            else
+                this.name = str;
+
+            Console.Write("Введите пол работника (м/ж): ");
+            str = Console.ReadLine();
+            if (str == string.Empty)
+                gender = '\0';
+            else
+            {
+                switch (str.ToLower()[0])
+                {
+                    case 'м':
+                        this.gender = 'м';
+                        break;
+                    case 'ж':
+                        this.gender = 'ж';
+                        break;
+                    default:
+                        gender = '\0';
+                        break;
+                }
+            }
+
+            Console.Write("Введите дату начала временного интервала: ");
+            str = Console.ReadLine();
+            if (!DateTime.TryParse(str, out recruitmentDateStart))
+                recruitmentDateStart = new DateTime(0);
+
+            Console.Write("Введите дату конца временного интервала: ");
+            str = Console.ReadLine();
+            if (!DateTime.TryParse(str, out recruitmentDateEnd))
+                recruitmentDateEnd = new DateTime(0);
+
+            if(this.recruitmentDateStart != new DateTime(0) && this.recruitmentDateEnd != new DateTime(0) && this.recruitmentDateStart > this.recruitmentDateEnd)
+            {
+                DateTime temp = new DateTime();
+                temp = this.recruitmentDateStart;
+                this.recruitmentDateStart = this.recruitmentDateEnd;
+                this.recruitmentDateEnd = temp;
+            }
+
+            if(this.name != null)
+                Console.WriteLine($"Фильтрация по имени: { this.name }");
+            else
+                Console.WriteLine("Фильтрация по имени не задана");
+
+            if (this.post != null)
+                Console.WriteLine($"Фильтрация по должности: { this.post }");
+            else
+                Console.WriteLine("Фильтрация по должности не задана");
+
+            if (this.gender != '\0')
+            {
+                switch(this.gender)
+                {
+                    case 'м':
+                        Console.WriteLine("Фильтрация по полу: мужской");
+                        break;
+                    case 'ж':
+                        Console.WriteLine("Фильтрация по полу: женский");
+                        break;
+                }
+            }                
+            else
+                Console.WriteLine("Фильтрация по полу не задана");
+
+            if (this.recruitmentDateStart != new DateTime(0))
+                Console.WriteLine($"Фильтрация по дате приема на работу - с : { this.recruitmentDateStart }");
+            else
+                Console.WriteLine("Фильтрация по дате приема на работу - нижняя граница интервала не задана");
+
+            if (this.recruitmentDateEnd != new DateTime(0))
+                Console.WriteLine($"Фильтрация по дате приема на работу - по : { this.recruitmentDateEnd }");
+            else
+                Console.WriteLine("Фильтрация по дате приема на работу - верхняя граница интервала не задана");
         }
     }
 }
