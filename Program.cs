@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace isrpo
 {
@@ -19,7 +20,7 @@ namespace isrpo
         {
             WriteHelp();
             while (true)
-            {               
+            {
                 Console.Write("Выберите действие: ");
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.WriteLine();
@@ -27,6 +28,7 @@ namespace isrpo
                 {
                     case ConsoleKey.D1:
                         // Ввод нового элемента в список
+                        Worker.AddWorker();
                         break;
                     case ConsoleKey.D2:
                         // Вывод всего списка
@@ -49,11 +51,91 @@ namespace isrpo
                         Console.WriteLine("Неверный ввод!");
                         break;
                 }
-            }         
+            }
         }
     }
 
     // Реализация работника будет здесь
+    struct Worker
+    {
+        public enum GenderEnum
+        {
+            MALE,
+            FEMALE
+        }
+        private static List<Worker> workers = new List<Worker>();
+
+        /// Полное имя работника
+        string Name;
+        /// Должность работника
+        string Position;
+        /// Пол работника
+        GenderEnum Gender;
+        /// Дата найма работника
+        DateTime HireDate;
+
+        public static void AddWorker()
+        {
+            Worker worker = new Worker();
+            Console.Write("Введите полное имя работника: ");
+            worker.Name = ReadString();
+            Console.Write("Введите должность работника: ");
+            worker.Position = ReadString();
+            Console.Write("Введите пол работника (м/ж): ");
+            worker.Gender = ReadGender();
+            Console.Write("Введите дату найма работника: ");
+            worker.HireDate = ReadDate();
+            workers.Add(worker);
+        }
+
+        public static void PrintWorkers()
+        {
+
+        }
+
+        public static string ReadString()
+        {
+            string result;
+            while ((result = Console.ReadLine()) == string.Empty)
+            {
+                Console.WriteLine("Нельзя ввести пустую строку");
+            };
+            return result;
+        }
+
+        public static GenderEnum ReadGender()
+        {
+            while (true)
+            {
+                switch (ReadString().ToLower()[0])
+                {
+                    case 'м':
+                        return GenderEnum.MALE;
+                    case 'ж':
+                        return GenderEnum.FEMALE;
+                    default:
+                        Console.WriteLine("Пол указан неверно. Просто введите «м» или «ж».");
+                        continue;
+                }
+            }
+        }
+
+        public static DateTime ReadDate()
+        {
+            while (true)
+            {
+                DateTime result;
+                if (DateTime.TryParse(ReadString(), out result))
+                    return result;
+                Console.WriteLine("Неправильный формат даты.");
+            }
+        }
+
+        void PrintSingleWorker()
+        {
+
+        }
+    }
 
     // Реализация фильтра будет здесь
     struct Filter
