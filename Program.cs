@@ -60,28 +60,52 @@ namespace isrpo
         }
     }
 
-    // Реализация работника будет здесь
+    /// <summary>
+    /// Cтруктура для представления отдельного работника.
+    /// </summary>
     struct Worker
     {
+        /// <summary>
+        /// Перечисление для представления пола работника.
+        /// </summary>
         public enum GenderEnum
         {
             MALE,
             FEMALE
         }
+
+        /// <summary>
+        /// Список, в котором хранятся все добавленные работники.
+        /// </summary>
         private static List<Worker> workers = new List<Worker>();
 
-        /// Полное имя работника
+        /// <summary>
+        /// Полное имя работника.
+        /// </summary>
         string Name;
-        /// Должность работника
+        /// <summary>
+        /// Должность работника.
+        /// </summary>
         string Position;
-        /// Пол работника
+        /// <summary>
+        /// Пол работника.
+        /// </summary>
         GenderEnum Gender;
-        /// Дата найма работника
+        /// <summary>
+        /// Дата найма работника.
+        /// </summary>
         DateTime HireDate;
 
+        /// <summary>
+        /// Метод для добавления новых работников путём ввода их параметров
+        /// через консоль.
+        /// </summary>
         public static void AddWorker()
         {
+            // Создание работника
             Worker worker = new Worker();
+
+            // Заполнение структуры работника
             Console.Write("Введите полное имя работника: ");
             worker.Name = ReadString();
             Console.Write("Введите должность работника: ");
@@ -90,9 +114,14 @@ namespace isrpo
             worker.Gender = ReadGender();
             Console.Write("Введите дату найма работника: ");
             worker.HireDate = ReadDate();
+
+            // Сохранение работника в список
             workers.Add(worker);
         }
 
+        /// <summary>
+        /// Метод для вывода всех работников на консоль с их подсчётом.
+        /// </summary>
         public static void PrintWorkers()
         {
             int counter = 1;
@@ -103,6 +132,9 @@ namespace isrpo
             }
         }
 
+        /// <summary>
+        /// Метод для ввода строки. Зацикливается до ввода непустой строки.
+        /// </summary>
         public static string ReadString()
         {
             string result;
@@ -113,6 +145,10 @@ namespace isrpo
             return result;
         }
 
+        /// <summary>
+        /// Метод для ввода пола работника. Зацикливается до ввода правильного
+        /// значения для пола работника.
+        /// </summary>
         public static GenderEnum ReadGender()
         {
             while (true)
@@ -130,6 +166,10 @@ namespace isrpo
             }
         }
 
+        /// <summary>
+        /// Метод для ввода даты и времени. Зацикливается до ввода правильного
+        /// значения для даты и времени.
+        /// </summary>
         public static DateTime ReadDate()
         {
             while (true)
@@ -141,8 +181,12 @@ namespace isrpo
             }
         }
 
+        /// <summary>
+        /// Метод для вывода информации об одном работнике на консоль.
+        /// </summary>
         void PrintSingleWorker()
         {
+            // Выбор строкового представления пола работника
             string genderString;
             switch (Gender)
             {
@@ -157,6 +201,7 @@ namespace isrpo
                     break;
             }
 
+            // Вывод информации о работнике
             Console.WriteLine($"Имя: { Name }");
             Console.WriteLine($"Должность: { Position }");
             Console.WriteLine($"Пол: { genderString }");
