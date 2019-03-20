@@ -5,27 +5,21 @@ namespace isrpo
 {
     class Program
     {
-        // Функция, которая выводит справку
-        public static void WriteHelp()
-        {
-            Console.WriteLine("1 - Ввод нового элемента в список.");
-            Console.WriteLine("2 - Вывод всего списка.");
-            Console.WriteLine("3 - Вывод отфильтрованного списка.");
-            Console.WriteLine("4 - Ввести значение фильтра.");
-            Console.WriteLine("0 - Выход из программы.");
-            Console.WriteLine("9 - Вывод этой справки.");
-            Console.WriteLine();
-        }
-
         static void Main(string[] args)
-        {
-            Filter filter = new Filter();
-            WriteHelp();
+        {                      
             // Цикл главного меню
+            Filter filter = new Filter();
             while (true)
             {
+                // Вывод справки
+                WriteHelp();
+
+                // Выбор пользователем пункта главного меню
                 Console.Write("Выберите действие: ");
                 string action = Console.ReadLine();
+
+                // Обработка выбора пункта главного меню
+                Console.WriteLine();
                 switch (action)
                 {
                     case "1":   // Ввод нового элемента в список
@@ -48,15 +42,23 @@ namespace isrpo
                         Console.WriteLine("Работа программы завершена.");
                         return;
 
-                    case "9":   // Вывод справки
-                        WriteHelp();
-                        break;
-
                     default:    // Неверный ввод
                         Console.WriteLine("Неверный ввод!");
                         break;
                 }
+                Console.WriteLine();
             }
+        }
+
+        // Справка
+        public static void WriteHelp()
+        {
+            Console.WriteLine("1 - Ввод нового элемента в список.");
+            Console.WriteLine("2 - Вывод всего списка.");
+            Console.WriteLine("3 - Вывод отфильтрованного списка.");
+            Console.WriteLine("4 - Ввести значение фильтра.");
+            Console.WriteLine("0 - Выход из программы.");
+            Console.WriteLine();
         }
     }
 
