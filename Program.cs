@@ -6,7 +6,7 @@ namespace isrpo
     class Program
     {
         static void Main(string[] args)
-        {                      
+        {
             // Цикл главного меню
             Filter filter = new Filter();
             while (true)
@@ -211,97 +211,111 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для вывода отфильтрованного списка работников на консоль.
+        /// Вывод отфильтрованного списка работников на консоль.
         /// <param name = "filter"> Ссылка на используемый фильтр </param>
         /// </summary>
         public static void PrintFilteredWorkers(ref Filter filter)
         {
             foreach (Worker worker in workers)
             {
-                // Если значение фильтра по имени задано и не совпадает с именем работника, этот работник пропускается
-                if (filter.name != null && worker.Name != filter.name)
+                // Проверка соответствия работника фильтру по имени
+                if (filter.name != null && !worker.Name.Contains(filter.name))
                     continue;
 
-                // Если значение фильтра по должности задано и не совпадает с должностью работника, этот работник пропускается
+                // Проверка соответствия работника фильтру по должности
                 if (filter.post != null && worker.Position != filter.post)
                     continue;
 
-                // Если значение фильтра по полу задано и не совпадает с полом работника, этот работник пропускается
-                if (filter.gender != '\0')
+                // Проверка соответствия работника фильтру по полу
+                switch (filter.gender)
                 {
-                    if (worker.Gender == Worker.GenderEnum.MALE && filter.gender == 'ж')
-                        continue;
+                    case 'м':
+                        if (worker.Gender == Worker.GenderEnum.FEMALE)
+                            continue;
+                        break;
 
-                    if (worker.Gender == Worker.GenderEnum.FEMALE && filter.gender == 'м')
-                        continue;
+                    case 'ж':
+                        if (worker.Gender == Worker.GenderEnum.MALE)
+                            continue;
+                        break;
                 }
 
-                // Если фильтры по дате не заданы, информация о работнике выводится на консоль
-                if (filter.recruitmentDateStart == new DateTime(0) && filter.recruitmentDateEnd == new DateTime(0))
+                // Проверка соответствия работника фильтру по дате приема на работу
+                if (filter.recruitmentDateStart == new DateTime(0))
                 {
-                    worker.PrintSingleWorker();
-                    continue;
-                }
-
-                // Если нижняя граница фильтра не задана, но верхняя задана, она сравнивается с датой приема на работу работника
-                if (filter.recruitmentDateStart != new DateTime(0) && filter.recruitmentDateEnd == new DateTime(0))
-                {
-                    if (worker.HireDate < filter.recruitmentDateEnd)
+                    if (filter.recruitmentDateEnd == new DateTime(0))
+                    {
                         worker.PrintSingleWorker();
-                    continue;
+                    }
+                    else
+                    {
+                        if (worker.HireDate <= filter.recruitmentDateEnd)
+                        {
+                            worker.PrintSingleWorker();
+                        }
+                    }
                 }
-
-                // Если оба значения фильтра по дате заданы, проверяется соответствие с датой приема на работу работника
-                if (filter.recruitmentDateStart != new DateTime(0) && filter.recruitmentDateEnd != new DateTime(0))
+                else
                 {
-                    if (worker.HireDate >= filter.recruitmentDateStart && worker.HireDate <= filter.recruitmentDateEnd)
-                        worker.PrintSingleWorker();
-                    continue;
+                    if (filter.recruitmentDateEnd == new DateTime(0))
+                    {
+                        if (worker.HireDate >= filter.recruitmentDateStart)
+                        {
+                            worker.PrintSingleWorker();
+                        }
+                    }
+                    else
+                    {
+                        if (worker.HireDate >= filter.recruitmentDateStart && worker.HireDate <= filter.recruitmentDateEnd)
+                        {
+                            worker.PrintSingleWorker();
+                        }
+                    }
                 }
             }
         }
     }
 
     /// <summary>
-    /// Структура для представления фильтра
+    /// Фильтр
     /// </summary>
     struct Filter
     {
         /// <summary>
-        /// Полное имя работника
+        /// Фильтр по имени
         /// </summary>
         public string name;
         /// <summary>
-        /// Должность работника
+        /// Фильтр по должности
         /// </summary>
         public string post;
         /// <summary>
-        /// Пол работника
+        /// Фильтр по полу
         /// </summary>
         public char gender;
         /// <summary>
-        /// Начало временного периода для фильтрации
+        /// Фильтр по дате приема на работу - нижняя граница
         /// </summary>
         public DateTime recruitmentDateStart;
         /// <summary>
-        /// Конец временного периода для фильтрации
+        /// Фильтр по дате приема на работу - верхняя граница
         /// </summary>
         public DateTime recruitmentDateEnd;
 
         /// <summary>
-        /// Метод для установки полей фильтра
+        /// Установка полей фильтра
         /// </summary>
         public void setFilter()
         {
-            // Если введена пустая строка, то фильтрация по имени не задана
-            Console.Write("Введите полное имя работника: ");
+            // Ввод фильтра по имени
+            Console.Write("Введите имя работника: ");
             string str = Console.ReadLine();
             if (str == string.Empty)
                 this.name = null;
             else
                 this.name = str;
 
-            // Если введена пустая строка, то фильтрация по должности не задана
+            // Ввод фильтра по должности
             Console.Write("Введите должность работника: ");
             str = Console.ReadLine();
             if (str == string.Empty)
@@ -309,40 +323,45 @@ namespace isrpo
             else
                 this.post = str;
 
-            // Если введена пустая строка, то фильтрация по полу не задана
+            // Ввод фильтра по полу
             Console.Write("Введите пол работника (м/ж): ");
-            str = Console.ReadLine();
-            if (str == string.Empty)
-                gender = '\0';
-            else
+            while (true)
             {
-                switch (str.ToLower()[0])
+                str = Console.ReadLine();
+                switch (str.ToLower())
                 {
-                    case 'м':
+                    case "м":
                         this.gender = 'м';
                         break;
-                    case 'ж':
+
+                    case "ж":
                         this.gender = 'ж';
                         break;
-                    default:
+
+                    case "":
                         gender = '\0';
                         break;
+
+                    default:
+                        Console.Write("Введите пол работника (м/ж): ");
+                        continue;
                 }
+                break;
             }
 
-            // Если введена пустая строка, то нижняя граница интервала не задана
+            // Ввод фильтра по дате приема на работу - нижняя граница
             Console.Write("Введите дату начала временного интервала: ");
             str = Console.ReadLine();
             if (!DateTime.TryParse(str, out recruitmentDateStart))
                 recruitmentDateStart = new DateTime(0);
 
-            // Если введена пустая строка, то верхняя граница интервала не задана
+            // Ввод фильтра по дате приема на работу - верхняя граница
             Console.Write("Введите дату конца временного интервала: ");
             str = Console.ReadLine();
             if (!DateTime.TryParse(str, out recruitmentDateEnd))
                 recruitmentDateEnd = new DateTime(0);
 
-            // Если заданы оба значения филтра по дате, и дата конца меньше, чем дата начала, то они меняются местами
+            // Проверка на корректность фильтров по дате приема на работу
             if (this.recruitmentDateStart != new DateTime(0) && this.recruitmentDateEnd != new DateTime(0) && this.recruitmentDateStart > this.recruitmentDateEnd)
             {
                 DateTime temp = new DateTime();
@@ -356,33 +375,28 @@ namespace isrpo
                 Console.WriteLine($"Фильтрация по имени: { this.name }");
             else
                 Console.WriteLine("Фильтрация по имени не задана");
-
             if (this.post != null)
                 Console.WriteLine($"Фильтрация по должности: { this.post }");
             else
                 Console.WriteLine("Фильтрация по должности не задана");
-
-            if (this.gender != '\0')
+            switch (this.gender)
             {
-                switch (this.gender)
-                {
-                    case 'м':
-                        Console.WriteLine("Фильтрация по полу: мужской");
-                        break;
+                case 'м':
+                    Console.WriteLine("Фильтрация по полу: мужской");
+                    break;
 
-                    case 'ж':
-                        Console.WriteLine("Фильтрация по полу: женский");
-                        break;
-                }
+                case 'ж':
+                    Console.WriteLine("Фильтрация по полу: женский");
+                    break;
+
+                case '\0':
+                    Console.WriteLine("Фильтрация по полу не задана");
+                    break;
             }
-            else
-                Console.WriteLine("Фильтрация по полу не задана");
-
             if (this.recruitmentDateStart != new DateTime(0))
                 Console.WriteLine($"Фильтрация по дате приема на работу - с : { this.recruitmentDateStart }");
             else
                 Console.WriteLine("Фильтрация по дате приема на работу - нижняя граница интервала не задана");
-
             if (this.recruitmentDateEnd != new DateTime(0))
                 Console.WriteLine($"Фильтрация по дате приема на работу - по : { this.recruitmentDateEnd }");
             else
