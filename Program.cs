@@ -227,6 +227,7 @@ namespace isrpo
         public static void PrintFilteredWorkers(ref Filter filter)
         {
             // Проходимся по всем работникам
+            int counter = 1;
             foreach (Worker worker in workers)
             {
                 // Проверка соответствия работника фильтру по имени
@@ -263,7 +264,8 @@ namespace isrpo
                         continue;
                 }
 
-                // Если рабочий соответствует всем полям фильтра, выводим его на консоль
+                // Если рабочий соответствует всем полям фильтра, выводим его на консоль                
+                Console.WriteLine($"        Работник №{ counter++ }:");
                 worker.PrintSingleWorker();
             }
         }
