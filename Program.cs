@@ -166,8 +166,10 @@ namespace isrpo
                 {
                     case 'м':
                         return GenderEnum.MALE;
+
                     case 'ж':
                         return GenderEnum.FEMALE;
+
                     default:
                         Console.WriteLine("Пол указан неверно. Просто введите «м» или «ж».");
                         continue;
@@ -201,9 +203,11 @@ namespace isrpo
                 case GenderEnum.MALE:
                     genderString = "мужской";
                     break;
+
                 case GenderEnum.FEMALE:
                     genderString = "женский";
                     break;
+
                 default:
                     genderString = "ошибочка в программе";
                     break;
@@ -222,6 +226,7 @@ namespace isrpo
         /// </summary>
         public static void PrintFilteredWorkers(ref Filter filter)
         {
+            // Проходимся по всем работникам
             foreach (Worker worker in workers)
             {
                 // Проверка соответствия работника фильтру по имени
@@ -249,35 +254,17 @@ namespace isrpo
                 // Проверка соответствия работника фильтру по дате приема на работу
                 if (filter.recruitmentDateStart == new DateTime(0))
                 {
-                    if (filter.recruitmentDateEnd == new DateTime(0))
-                    {
-                        worker.PrintSingleWorker();
-                    }
-                    else
-                    {
-                        if (worker.HireDate <= filter.recruitmentDateEnd)
-                        {
-                            worker.PrintSingleWorker();
-                        }
-                    }
+                    if (filter.recruitmentDateEnd != new DateTime(0) && worker.HireDate > filter.recruitmentDateEnd)
+                        continue;
                 }
                 else
                 {
-                    if (filter.recruitmentDateEnd == new DateTime(0))
-                    {
-                        if (worker.HireDate >= filter.recruitmentDateStart)
-                        {
-                            worker.PrintSingleWorker();
-                        }
-                    }
-                    else
-                    {
-                        if (worker.HireDate >= filter.recruitmentDateStart && worker.HireDate <= filter.recruitmentDateEnd)
-                        {
-                            worker.PrintSingleWorker();
-                        }
-                    }
+                    if (filter.recruitmentDateEnd != new DateTime(0) && (worker.HireDate < filter.recruitmentDateStart || worker.HireDate > filter.recruitmentDateEnd))
+                        continue;
                 }
+
+                // Если рабочий соответствует всем полям фильтра, выводим его на консоль
+                worker.PrintSingleWorker();
             }
         }
     }
@@ -291,18 +278,22 @@ namespace isrpo
         /// Фильтр по имени
         /// </summary>
         public string name;
+
         /// <summary>
         /// Фильтр по должности
         /// </summary>
         public string post;
+
         /// <summary>
         /// Фильтр по полу
         /// </summary>
         public char gender;
+
         /// <summary>
         /// Фильтр по дате приема на работу - нижняя граница
         /// </summary>
         public DateTime recruitmentDateStart;
+
         /// <summary>
         /// Фильтр по дате приема на работу - верхняя граница
         /// </summary>
@@ -376,15 +367,19 @@ namespace isrpo
                 this.recruitmentDateEnd = temp;
             }
 
-            // Вывод информации о полях фильтра на консоль
+            // Вывод значения фильтра по имени на консоль
             if (this.name != null)
                 Console.WriteLine($"Фильтрация по имени: { this.name }");
             else
                 Console.WriteLine("Фильтрация по имени не задана");
+
+            // Вывод значения фильтра по должности
             if (this.post != null)
                 Console.WriteLine($"Фильтрация по должности: { this.post }");
             else
                 Console.WriteLine("Фильтрация по должности не задана");
+
+            // Вывод значения фильтра по полу на консоль
             switch (this.gender)
             {
                 case 'м':
@@ -399,10 +394,14 @@ namespace isrpo
                     Console.WriteLine("Фильтрация по полу не задана");
                     break;
             }
+
+            // Вывод значения фильтра по дате приема на работу, нижней границы, на консоль
             if (this.recruitmentDateStart != new DateTime(0))
                 Console.WriteLine($"Фильтрация по дате приема на работу - с : { this.recruitmentDateStart }");
             else
                 Console.WriteLine("Фильтрация по дате приема на работу - нижняя граница интервала не задана");
+
+            // Вывод значения фильтра по дате приема на работу, верхней границы, на консоль
             if (this.recruitmentDateEnd != new DateTime(0))
                 Console.WriteLine($"Фильтрация по дате приема на работу - по : { this.recruitmentDateEnd }");
             else
