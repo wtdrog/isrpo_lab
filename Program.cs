@@ -34,7 +34,7 @@ namespace isrpo
                         Worker.PrintFilteredWorkers(ref filter);
                         break;
 
-                    case "4":   // Ввести значение фильтра                       
+                    case "4":   // Ввести значение фильтра
                         filter.setFilter();
                         break;
 
@@ -63,12 +63,12 @@ namespace isrpo
     }
 
     /// <summary>
-    /// Cтруктура для представления отдельного работника.
+    /// Работник
     /// </summary>
     struct Worker
     {
         /// <summary>
-        /// Перечисление для представления пола работника.
+        /// Пол
         /// </summary>
         public enum GenderEnum
         {
@@ -77,43 +77,51 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Список, в котором хранятся все добавленные работники.
+        /// Список работников
         /// </summary>
         private static List<Worker> workers = new List<Worker>();
 
         /// <summary>
-        /// Полное имя работника.
+        /// Полное имя работника
         /// </summary>
         string Name;
+
         /// <summary>
-        /// Должность работника.
+        /// Должность работника
         /// </summary>
         string Position;
+
         /// <summary>
-        /// Пол работника.
+        /// Пол работника
         /// </summary>
         GenderEnum Gender;
+
         /// <summary>
-        /// Дата найма работника.
+        /// Дата найма работника
         /// </summary>
         DateTime HireDate;
 
         /// <summary>
-        /// Метод для добавления новых работников путём ввода их параметров
-        /// через консоль.
+        /// Добавление нового работника из консоли
         /// </summary>
         public static void AddWorker()
         {
-            // Создание работника
+            // Создание структуры
             Worker worker = new Worker();
 
-            // Заполнение структуры работника
+            // Ввод имени
             Console.Write("Введите полное имя работника: ");
             worker.Name = ReadString();
+
+            // Ввод должности
             Console.Write("Введите должность работника: ");
             worker.Position = ReadString();
+
+            // Ввод пола
             Console.Write("Введите пол работника (м/ж): ");
             worker.Gender = ReadGender();
+
+            // Ввод даты найма
             Console.Write("Введите дату найма работника: ");
             worker.HireDate = ReadDate();
 
@@ -122,7 +130,7 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для вывода всех работников на консоль с их подсчётом.
+        /// Вывод всех работников на консоль с их подсчётом
         /// </summary>
         public static void PrintWorkers()
         {
@@ -135,7 +143,7 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для ввода строки. Зацикливается до ввода непустой строки.
+        /// Ввод непустой строки
         /// </summary>
         public static string ReadString()
         {
@@ -148,8 +156,7 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для ввода пола работника. Зацикливается до ввода правильного
-        /// значения для пола работника.
+        /// Ввод пола работника
         /// </summary>
         public static GenderEnum ReadGender()
         {
@@ -169,8 +176,7 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для ввода даты и времени. Зацикливается до ввода правильного
-        /// значения для даты и времени.
+        /// Ввод даты и времени
         /// </summary>
         public static DateTime ReadDate()
         {
@@ -184,7 +190,7 @@ namespace isrpo
         }
 
         /// <summary>
-        /// Метод для вывода информации об одном работнике на консоль.
+        /// Вывод информации об одном работнике на консоль
         /// </summary>
         void PrintSingleWorker()
         {
