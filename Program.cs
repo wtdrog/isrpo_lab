@@ -260,8 +260,16 @@ namespace isrpo
                 }
                 else
                 {
-                    if (filter.recruitmentDateEnd != new DateTime(0) && (worker.HireDate < filter.recruitmentDateStart || worker.HireDate > filter.recruitmentDateEnd))
+                    if (filter.recruitmentDateEnd != new DateTime(0))
+                    {
+                        if (worker.HireDate < filter.recruitmentDateStart || worker.HireDate > filter.recruitmentDateEnd)
                         continue;
+                    }
+                    else
+                    {
+                        if (worker.HireDate < filter.recruitmentDateStart)
+                            continue;
+                    }
                 }
 
                 // Если рабочий соответствует всем полям фильтра, выводим его на консоль                
@@ -349,16 +357,36 @@ namespace isrpo
             }
 
             // Ввод фильтра по дате приема на работу - нижняя граница
-            Console.Write("Введите дату начала временного интервала: ");
-            str = Console.ReadLine();
-            if (!DateTime.TryParse(str, out recruitmentDateStart))
-                recruitmentDateStart = new DateTime(0);
+            while (true)
+            {
+                Console.Write("Введите дату начала временного интервала: ");
+                str = Console.ReadLine();
+                if (str == "")
+                {
+                    recruitmentDateStart = new DateTime(0);
+                    break;
+                }
+                if (!DateTime.TryParse(str, out recruitmentDateStart))
+                    continue;
+                else
+                    break;
+            }
 
             // Ввод фильтра по дате приема на работу - верхняя граница
-            Console.Write("Введите дату конца временного интервала: ");
-            str = Console.ReadLine();
-            if (!DateTime.TryParse(str, out recruitmentDateEnd))
-                recruitmentDateEnd = new DateTime(0);
+            while (true)
+            {
+                Console.Write("Введите дату конца временного интервала: ");
+                str = Console.ReadLine();
+                if (str == "")
+                {
+                    recruitmentDateEnd = new DateTime(0);
+                    break;
+                }
+                if (!DateTime.TryParse(str, out recruitmentDateEnd))
+                    continue;
+                else
+                    break;
+            }
 
             // Проверка на корректность фильтров по дате приема на работу
             if (this.recruitmentDateStart != new DateTime(0) && this.recruitmentDateEnd != new DateTime(0) && this.recruitmentDateStart > this.recruitmentDateEnd)
